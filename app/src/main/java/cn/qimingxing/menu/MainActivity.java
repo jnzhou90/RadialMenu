@@ -2,12 +2,14 @@ package cn.qimingxing.menu;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.radialmenu.OnRadailMenuClick;
 import com.example.radialmenu.RadialMenuItem;
 import com.example.radialmenu.RadialMenuRenderer;
+import com.example.radialmenu.RadialMenuView;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,6 @@ public class MainActivity extends FragmentActivity {
     //Variable declarations
     private RadialMenuRenderer mRenderer;
     private FrameLayout mHolderLayout;
-    public RadialMenuItem menuContactItem, menuMainItem, menuAboutItem;
     private ArrayList<RadialMenuItem> mMenuItems = new ArrayList<>(9);
 
     @Override
@@ -30,59 +31,65 @@ public class MainActivity extends FragmentActivity {
         mHolderLayout = findViewById(R.id.fragment_container);
         // Init the Radial Menu and menu items
         mRenderer = new RadialMenuRenderer(mHolderLayout, false, 100, 500);
-        menuContactItem = new RadialMenuItem(getResources().getString(R.string.contact),getResources().getString(R.string.contact));
-        menuMainItem = new RadialMenuItem(getResources().getString(R.string.main_menu), getResources().getString(R.string.main_menu));
-        menuAboutItem = new RadialMenuItem(getResources().getString(R.string.about), getResources().getString(R.string.about));
-        //Add the menu Items
-        mMenuItems.add(menuMainItem);
-        mMenuItems.add(menuAboutItem);
-        mMenuItems.add(menuContactItem);
-        mMenuItems.add(menuContactItem);
-        mMenuItems.add(menuMainItem);
-        mMenuItems.add(menuAboutItem);
-        mMenuItems.add(menuContactItem);
-        mMenuItems.add(menuContactItem);
+        mMenuItems.add(new RadialMenuItem("1", "1"));
+        mMenuItems.add(new RadialMenuItem("2", "2"));
+        mMenuItems.add(new RadialMenuItem("3", "3"));
+        mMenuItems.add(new RadialMenuItem("4", "4"));
+        mMenuItems.add(new RadialMenuItem("5", "5"));
+        mMenuItems.add(new RadialMenuItem("6", "6"));
+        mMenuItems.add(new RadialMenuItem("7", "7"));
+        mMenuItems.add(new RadialMenuItem("8", "8"));
+        mMenuItems.add(new RadialMenuItem("9", "9"));
+        mMenuItems.add(new RadialMenuItem("0", "0"));
+        mMenuItems.add(new RadialMenuItem("保存", "保存"));
+
+        mMenuItems.add(new RadialMenuItem("删除", "删除"));
         
         mRenderer.setRadialMenuContent(mMenuItems);
-        mHolderLayout.addView(mRenderer.renderView());
+        RadialMenuView view = mRenderer.renderView();
+        mHolderLayout.addView(view);
         //Handle the menu item interactions
-        menuAboutItem.setOnRadialMenuClickListener(new OnRadailMenuClick() {
+        view.setOnRadialMenuClickListener(new OnRadailMenuClick() {
             @Override
             public void onRadailMenuClickedListener(String id) {
-                Toast.makeText(MainActivity.this, "down", Toast.LENGTH_SHORT).show();
+                switch (id) {
+                    case "1":
+                        Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "2":
+                        Toast.makeText(MainActivity.this, "2", Toast.LENGTH_SHORT).show();
 
+                        break;
+                    case "3":
+                        break;
+                    case "4":
+                        break;
+                    case "5":
+                        break;
+                    case "6":
+                        break;
+                    case "7":
+                        break;
+                    case "8":
+                        break;
+                    case "9":
+                        break;
+                    case "0":
+                        break;
+                    case "保存":
+                        break;
+                    case "退出":
+                        break;
+
+                }
             }
 
             @Override
-            public void onRadailMenuActionDownListener(String name) {
-                Toast.makeText(MainActivity.this, " " + name, Toast.LENGTH_SHORT).show();
+            public void onRadailMenuActionDownListener(String id) {
+
             }
         });
-        menuMainItem.setOnRadialMenuClickListener(new OnRadailMenuClick() {
-            @Override
-            public void onRadailMenuClickedListener(String id) {
-                Toast.makeText(MainActivity.this, "down", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onRadailMenuActionDownListener(String name) {
-                Toast.makeText(MainActivity.this, " " + name, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        menuContactItem.setOnRadialMenuClickListener(new OnRadailMenuClick() {
-            @Override
-            public void onRadailMenuClickedListener(String id) {
-                Toast.makeText(MainActivity.this, "down", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onRadailMenuActionDownListener(String name) {
-                Toast.makeText(MainActivity.this, " " + name, Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
     }
 

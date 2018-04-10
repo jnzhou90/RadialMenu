@@ -9,5 +9,5 @@ public interface OnRadailMenuClick {
 
     void onRadailMenuClickedListener(String id);
 
-    void onRadailMenuActionDownListener(String name);
+    void onRadailMenuActionDownListener(String id);
 }

@@ -61,8 +61,13 @@ public class RadialMenuView extends View {
 	private Paint mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	
 	private RadialMenuHelperFunctions mHelperFunctions;
-	
-	/**
+
+	// 为了避免每个 item 的点击事件的重复编写，集成为一个
+    private OnRadailMenuClick mCallback;
+
+
+
+    /**
 	 * 
 	 * @param context
 	 * @param renderer
@@ -202,8 +207,14 @@ public class RadialMenuView extends View {
 			invalidate();
 			return false;
 		}
-		mRadialMenuContent.get(e).getOnRadailMenuClick()
-			.onRadailMenuClickedListener(mRadialMenuContent.get(e).getMenuID());
+		if (mRadialMenuContent.get(e).getOnRadailMenuClick() != null) {
+            mRadialMenuContent.get(e).getOnRadailMenuClick()
+                    .onRadailMenuClickedListener(mRadialMenuContent.get(e).getMenuID());
+        }
+        if (mCallback != null) {
+            mCallback.onRadailMenuClickedListener(mRadialMenuContent.get(e).getMenuID());
+
+        }
 		selected = -1;
 		invalidate();
 		return true;
@@ -230,8 +241,16 @@ public class RadialMenuView extends View {
 			return;
 		}
 		selected = e;
-		mRadialMenuContent.get(e).getOnRadailMenuClick()
-				.onRadailMenuActionDownListener(mRadialMenuContent.get(e).getMenuName());
+		//单个item事件
+        if (mRadialMenuContent.get(e).getOnRadailMenuClick() != null) {
+            mRadialMenuContent.get(e).getOnRadailMenuClick()
+                    .onRadailMenuActionDownListener(mRadialMenuContent.get(e).getMenuID());
+        }
+        if (mCallback != null) {
+            // MenuView 事件
+            mCallback.onRadailMenuActionDownListener(mRadialMenuContent.get(e).getMenuID());
+        }
+
 		invalidate();
 		return;
 	}
@@ -262,4 +281,12 @@ public class RadialMenuView extends View {
 		//Eats touch if needed, fixes scrollable elements from interfering
 		return eat;
 	}
+
+    public OnRadailMenuClick getOnRadailMenuClick() {
+        return mCallback;
+    }
+
+    public void setOnRadialMenuClickListener(OnRadailMenuClick callback) {
+        mCallback = callback;
+    }
 }

@@ -69,7 +69,7 @@ public class RadialMenuRenderer {
 		this.mRadialMenuContent = mRadialMenuContent;
 	}
 	
-	public View renderView() {
+	public RadialMenuView renderView() {
 		final RadialMenuView menu = new RadialMenuView(mParentView.getContext(), this);
 		mParentView.setOnTouchListener(new OnTouchListener() {
 			@Override
