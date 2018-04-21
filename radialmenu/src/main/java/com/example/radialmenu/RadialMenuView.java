@@ -188,6 +188,15 @@ public class RadialMenuView extends View {
 					canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
 				}
 		}
+
+        for (int counter = 0; counter < tot; counter++) {
+            if (!mRadialMenuContent.get(counter).equals(RadialMenuRenderer.RADIAL_NO_TEXT))
+                if (alt) {
+                    canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
+                } else {
+                    canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
+                }
+        }
 	}
 
 	/**
