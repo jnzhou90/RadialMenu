@@ -1,14 +1,15 @@
 package com.example.radialmenu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -213,9 +214,18 @@ public class RadialMenuSurfaceView extends SurfaceView implements SurfaceHolder.
         setLoc(mWidth, mHeight);
 
         try {
+
             //获得canvas对象
             mCanvas = mSurfaceHolder.lockCanvas();
-
+            /**
+             * 下面代码主要解决图片重影问题，mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+             * 或者                          mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
+             * 1.PorterDuff.Mode.CLEAR
+             所绘制不会提交到画布上。
+             2.PorterDuff.Mode.SRC
+             显示上层绘制图片
+             */
+            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
             if (mHasImage) {
                 double bridgeLength = mRadius;
                 float angleDelay = 360 / mMenuCount;
@@ -237,17 +247,29 @@ public class RadialMenuSurfaceView extends SurfaceView implements SurfaceHolder.
                                     - smallRadius / 2);
 
                     bitmap = BitmapFactory.decodeResource(getResources(), mMenuImages[i]);
-                    RectF rectF = new RectF();
-                    rectF.left = (float) left;
-                    rectF.top = (float) top;
-                    rectF.right = (float) (left + smallRadius * 2);
-                    rectF.bottom = (float) (top + smallRadius * 2);
+                    Rect rect = new Rect();
+                    rect.left = (int) left;
+                    rect.top = (int) top;
+                    rect.right = (int) (left + smallRadius * 2);
+                    rect.bottom = (int) (top + smallRadius * 2);
+
+
+
                     if (bitmap != null) {
-                        mCanvas.drawBitmap(bitmap, null, rectF, null);
+                        mCanvas.drawBitmap(bitmap, null, rect, null);
                     }
+
+
+
                     mStartAngle += angleDelay;
                 }
+                mSurfaceHolder.unlockCanvasAndPost(mCanvas);
             } else {
+
+                //获得canvas对象
+                mCanvas = mSurfaceHolder.lockCanvas();
+
+
                 final RectF rect = new RectF();
                 rect.set(mWidth - mRadius, mHeight - mRadius, mWidth + mRadius, mHeight + mRadius);
                 mBorderPaint.setStrokeWidth(mThickness);
@@ -301,13 +323,15 @@ public class RadialMenuSurfaceView extends SurfaceView implements SurfaceHolder.
                     mCanvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91),
                             (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                 }
+
+                mSurfaceHolder.unlockCanvasAndPost(mCanvas);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (mCanvas != null) {
-                mSurfaceHolder.unlockCanvasAndPost(mCanvas);
-            }
+//            if (mCanvas != null) {
+//                mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+//            }
         }
 
     }
