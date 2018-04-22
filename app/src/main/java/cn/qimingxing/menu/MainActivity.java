@@ -31,7 +31,7 @@ public class MainActivity extends FragmentActivity {
         //Init the frame layout
         mHolderLayout = findViewById(R.id.fragment_container);
         // Init the Radial Menu and menu items
-        mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 350);
+        mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 350, false);
         mMenuItems.add(new RadialMenuItem("1", "1",  R.drawable.ic_launcher));
         mMenuItems.add(new RadialMenuItem("2", "2",  R.drawable.ic_launcher));
         mMenuItems.add(new RadialMenuItem("3", "3",  R.drawable.ic_launcher));

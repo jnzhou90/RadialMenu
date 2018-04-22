@@ -48,17 +48,20 @@ public class RadialMenuRenderer {
 	
 	private View mParentView;
 
+	private boolean hasImage;
+
 	/**
 	 * @param
 	 * @param alt
 	 * @param mThick
 	 * @param mRadius
 	 */
-	public RadialMenuRenderer(View parentView, boolean alt, float mThick, float mRadius) {
+	public RadialMenuRenderer(View parentView, boolean alt, float mThick, float mRadius, boolean hasImage) {
 		this.mParentView = parentView;
 		this.alt = alt;
 		this.mThickness = mThick;
 		this.mRadius = mRadius;
+		this.hasImage = hasImage;
 	}
 	
 	/**
@@ -162,4 +165,8 @@ public class RadialMenuRenderer {
 	public void setMenuBorderColor(int mMenuBorderColor) {
 		this.mMenuBorderColor = mMenuBorderColor;
 	}
+
+    public boolean isHasImage() {
+        return hasImage;
+    }
 }

@@ -69,6 +69,8 @@ public class RadialMenuView extends View {
 
     Context mContext;  //此变量考虑是不是使用
 
+    private boolean hasImage;
+
 
 
     /**
@@ -84,6 +86,7 @@ public class RadialMenuView extends View {
 		alt = renderer.isAlt();
 		mThickness = renderer.getMenuThickness();
 		mRadius = renderer.getRadius();
+		hasImage = renderer.isHasImage();
 		setVisibility(GONE); //通过mParentView调用才可实现，下面同理
 		initSetPaint(renderer);
 	}
@@ -203,37 +206,39 @@ public class RadialMenuView extends View {
 
 
 
-        double bridgeLength = mRadius;
-        float angleDelay = 360 / tot;
-        double mStartAngle = 0;
-        double left, top;
-        double smallRadius = mRadius / 4;
+       if (hasImage) {
+           double bridgeLength = mRadius;
+           float angleDelay = 360 / tot;
+           double mStartAngle = 0;
+           double left, top;
+           double smallRadius = mRadius / 4;
 
-        Bitmap bitmap;
+           Bitmap bitmap;
 
-        for (int i = 0; i < tot; i++) {
-            left = mWidth +
-                    Math.round(bridgeLength
-                            * Math.cos(Math.toRadians(mStartAngle))
-                            - smallRadius / 2);
-            top = mHeight +
-                    Math.round(bridgeLength
-                            * Math.sin(Math.toRadians(mStartAngle))
-                            - smallRadius / 2);
+           for (int i = 0; i < tot; i++) {
+               left = mWidth +
+                       Math.round(bridgeLength
+                               * Math.cos(Math.toRadians(mStartAngle))
+                               - smallRadius / 2);
+               top = mHeight +
+                       Math.round(bridgeLength
+                               * Math.sin(Math.toRadians(mStartAngle))
+                               - smallRadius / 2);
 
-            bitmap = BitmapFactory.decodeResource(getResources(), mRadialMenuContent.get(i).getDrawableInt());
-            Toast.makeText(getContext(), (bitmap == null) + " ", Toast.LENGTH_SHORT).show();
-            RectF rectF = new RectF();
-            rectF.left = (float) left;
-            rectF.top = (float) top;
-            rectF.right = (float) (left + smallRadius * 2);
-            rectF.bottom = (float) (top + smallRadius * 2);
-            if (bitmap != null) {
-                canvas.drawBitmap(bitmap, null, rectF, null);
-            }
+               bitmap = BitmapFactory.decodeResource(getResources(), mRadialMenuContent.get(i).getDrawableInt());
+               Toast.makeText(getContext(), (bitmap == null) + " ", Toast.LENGTH_SHORT).show();
+               RectF rectF = new RectF();
+               rectF.left = (float) left;
+               rectF.top = (float) top;
+               rectF.right = (float) (left + smallRadius * 2);
+               rectF.bottom = (float) (top + smallRadius * 2);
+               if (bitmap != null) {
+                   canvas.drawBitmap(bitmap, null, rectF, null);
+               }
 
-            mStartAngle += angleDelay;
-        }
+               mStartAngle += angleDelay;
+           }
+       }
 
 
 
