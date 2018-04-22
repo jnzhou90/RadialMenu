@@ -28,10 +28,12 @@ import java.util.ArrayList;
  * @author Arindam Nath (strider2023@gmail.com)
  */
 public class RadialMenuRenderer {
-	
 
-	private ArrayList<RadialMenuItem> mRadialMenuContent = new ArrayList<RadialMenuItem>(0);
-	
+
+    private String[] mMenuNames;
+
+    private int[] mMenuImages;
+
 	private boolean alt = false;
 	
 	private float mThickness = 30;
@@ -63,12 +65,15 @@ public class RadialMenuRenderer {
 		this.mRadius = mRadius;
 		this.hasImage = hasImage;
 	}
-	
-	/**
-	 * @param mRadialMenuContent the mRadialMenuContent to set
-	 */
-	public void setRadialMenuContent(ArrayList<RadialMenuItem> mRadialMenuContent) {
-		this.mRadialMenuContent = mRadialMenuContent;
+
+    /**
+     * 设置图标 和 相应的名字
+     * @param mMenuNames 名字数组
+     * @param mMenuImages 图标数组
+     */
+	public void setRadialMenuContent(String[] mMenuNames, int[] mMenuImages) {
+	    this.mMenuNames = mMenuNames;
+	    this.mMenuImages = mMenuImages;
 	}
 	
 	public RadialMenuView renderView() {
@@ -82,14 +87,16 @@ public class RadialMenuRenderer {
 		return menu;
 	}
 
-	/**
-	 * @return the mRadialMenuContent
-	 */
-	public ArrayList<RadialMenuItem> getRadialMenuContent() {
-		return mRadialMenuContent;
-	}
 
-	/**
+    public String[] getMenuNames() {
+        return mMenuNames;
+    }
+
+    public int[] getMenuImages() {
+        return mMenuImages;
+    }
+
+    /**
 	 * @return the alt
 	 */
 	public boolean isAlt() {

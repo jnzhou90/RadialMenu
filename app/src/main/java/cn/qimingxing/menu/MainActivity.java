@@ -1,13 +1,11 @@
 package cn.qimingxing.menu;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.radialmenu.OnRadailMenuClick;
-import com.example.radialmenu.RadialMenuItem;
 import com.example.radialmenu.RadialMenuRenderer;
 import com.example.radialmenu.RadialMenuView;
 
@@ -20,7 +18,10 @@ public class MainActivity extends FragmentActivity {
     //Variable declarations
     private RadialMenuRenderer mRenderer;
     private FrameLayout mHolderLayout;
-    private ArrayList<RadialMenuItem> mMenuItems = new ArrayList<>(9);
+
+    private String[] mMenuNames = {"1", "2", "3", "4"};
+    private int[] mMenuImages = {R.drawable.ic_launcher, R.drawable.ic_launcher,
+            R.drawable.ic_launcher, R.drawable.ic_launcher};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,18 +33,7 @@ public class MainActivity extends FragmentActivity {
         mHolderLayout = findViewById(R.id.fragment_container);
         // Init the Radial Menu and menu items
         mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 350, false);
-        mMenuItems.add(new RadialMenuItem("1", "1",  R.drawable.ic_launcher));
-        mMenuItems.add(new RadialMenuItem("2", "2",  R.drawable.ic_launcher));
-        mMenuItems.add(new RadialMenuItem("3", "3",  R.drawable.ic_launcher));
-        mMenuItems.add(new RadialMenuItem("4", "4",  R.drawable.ic_launcher));
-        mMenuItems.add(new RadialMenuItem("5", "5",  R.drawable.ic_launcher));
-//        mMenuItems.add(new RadialMenuItem("6", "6",  R.drawable.ic_launcher));
-//        mMenuItems.add(new RadialMenuItem("7", "7",  R.drawable.ic_launcher));
-//        mMenuItems.add(new RadialMenuItem("8", "8",  R.drawable.ic_launcher));
-//        mMenuItems.add(new RadialMenuItem("9", "9",  R.drawable.ic_launcher));
-//        mMenuItems.add(new RadialMenuItem("0", "0",  R.drawable.ic_launcher));
-
-        mRenderer.setRadialMenuContent(mMenuItems);
+        mRenderer.setRadialMenuContent(mMenuNames, mMenuImages);
         RadialMenuView view = mRenderer.renderView();
         mHolderLayout.addView(view);
         //Handle the menu item interactions

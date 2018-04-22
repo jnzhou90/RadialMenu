@@ -26,9 +26,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * 
@@ -36,9 +33,13 @@ import java.util.ArrayList;
  */
 public class RadialMenuView extends View {
 
-	private ArrayList<RadialMenuItem> mRadialMenuContent;
-	
-	boolean alt;
+    private String[] mMenuNames;
+
+    private int[] mMenuImages;
+    
+    private int mMenuCount;
+    
+    boolean alt;
 	
 	float mWidth = -1;//center of screen, will change to touch location
 	
@@ -82,7 +83,9 @@ public class RadialMenuView extends View {
 		super(context);
 		mContext = context;
 		mHelperFunctions = new RadialMenuHelperFunctions();
-		mRadialMenuContent = renderer.getRadialMenuContent();
+        mMenuNames = renderer.getMenuNames();
+        mMenuImages = renderer.getMenuImages();
+        mMenuCount = mMenuImages.length;
 		alt = renderer.isAlt();
 		mThickness = renderer.getMenuThickness();
 		mRadius = renderer.getRadius();
@@ -139,18 +142,17 @@ public class RadialMenuView extends View {
 	public void onDraw(Canvas canvas) {
 		//Fixes drawing off screen
 		setLoc(mWidth, mHeight);
-        int tot = mRadialMenuContent.size();
-
+        
        if (hasImage) {
            double bridgeLength = mRadius;
-           float angleDelay = 360 / tot;
+           float angleDelay = 360 / mMenuCount;
            double mStartAngle = 0;
            double left, top;
            double smallRadius = mRadius / 4;
 
            Bitmap bitmap;
 
-           for (int i = 0; i < tot; i++) {
+           for (int i = 0; i < mMenuCount; i++) {
                left = mWidth +
                        Math.round(bridgeLength
                                * Math.cos(Math.toRadians(mStartAngle))
@@ -160,8 +162,7 @@ public class RadialMenuView extends View {
                                * Math.sin(Math.toRadians(mStartAngle))
                                - smallRadius / 2);
 
-               bitmap = BitmapFactory.decodeResource(getResources(), mRadialMenuContent.get(i).getDrawableInt());
-               Toast.makeText(getContext(), (bitmap == null) + " ", Toast.LENGTH_SHORT).show();
+               bitmap = BitmapFactory.decodeResource(getResources(), mMenuImages[i]);
                RectF rectF = new RectF();
                rectF.left = (float) left;
                rectF.top = (float) top;
@@ -180,34 +181,34 @@ public class RadialMenuView extends View {
 
            mBorderPaint.setStrokeWidth(mThickness);
            //draws back of radial first
-           for (int counter = 0; counter < tot; counter++) {
+           for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt)
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 90 - 360 / mMenuCount / 2), (float) (360 / mMenuCount), false, (selected == counter ? mSelectedPaint : mBgPaint));
                else
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 90), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 90), (float) (360 / mMenuCount), false, (selected == counter ? mSelectedPaint : mBgPaint));
            }
 
            //draws text
-           for (int counter = 0; counter < tot; counter++) {
+           for (int counter = 0; counter < mMenuCount; counter++) {
                Path arc = new Path();
                if (alt) {
-                   arc.addArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2) + 10, (float) (360 / tot) - 10);
-                   canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, +mThickness / 8, mTextPaint);
+                   arc.addArc(rect, (float) (360 / mMenuCount * counter - 90 - 360 / mMenuCount / 2) + 10, (float) (360 / mMenuCount) - 10);
+                   canvas.drawTextOnPath(mMenuNames[counter], arc, 0, +mThickness / 8, mTextPaint);
                } else {
-                   arc.addArc(rect, (float) (360 / tot * counter - 90) + 10, (float) (360 / tot) - 10);
-                   canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, -mThickness / 8, mTextPaint);
+                   arc.addArc(rect, (float) (360 / mMenuCount * counter - 90) + 10, (float) (360 / mMenuCount) - 10);
+                   canvas.drawTextOnPath(mMenuNames[counter], arc, 0, -mThickness / 8, mTextPaint);
                }
            }
 
            //draws separators between each option
-           if (tot > 1)
-               for (int counter = 0; counter < tot; counter++) {
+           if (mMenuCount > 1)
+               for (int counter = 0; counter < mMenuCount; counter++) {
                    if (alt) {
-                       canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), 2, false, mBorderPaint);
-                       canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91 - 360 / tot / 2), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * (counter + 1) - 91 - 360 / mMenuCount / 2), 2, false, mBorderPaint);
                    } else {
-                       canvas.drawArc(rect, (float) (360 / tot * counter - 91), 2, false, mBorderPaint);
-                       canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * (counter + 1) - 91), 2, false, mBorderPaint);
                    }
                }
 
@@ -215,29 +216,29 @@ public class RadialMenuView extends View {
            mBorderPaint.setStrokeWidth(2);
            rect.set(mWidth - mRadius - mThickness / 2, mHeight - mRadius - mThickness / 2, mWidth + mRadius + mThickness / 2, mHeight + mRadius + mThickness / 2);
 
-           for (int counter = 0; counter < tot; counter++) {
+           for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt) {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 2, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), (float) (360 / mMenuCount) + 2, false, mBorderPaint);
                } else {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 2, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), (float) (360 / mMenuCount) + 2, false, mBorderPaint);
                }
            }
 
            rect.set(mWidth - mRadius + mThickness / 2, mHeight - mRadius + mThickness / 2, mWidth + mRadius - mThickness / 2, mHeight + mRadius - mThickness / 2);
 
-           for (int counter = 0; counter < tot; counter++) {
+           for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt) {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                } else {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                }
            }
 
-           for (int counter = 0; counter < tot; counter++) {
+           for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt) {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                } else {
-                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                }
            }
        }
@@ -249,18 +250,15 @@ public class RadialMenuView extends View {
 	 * @return consumed
 	 */
 	private boolean handleEvent(int e) {
-		if (e == mRadialMenuContent.size())
+		if (e == mMenuCount)
 			e = 0;
 		else if (e == -1) {
 			selected = -1;
 			return false;
 		}
-		if (mRadialMenuContent.get(e).getOnRadailMenuClick() != null) {
-            mRadialMenuContent.get(e).getOnRadailMenuClick()
-                    .onRadailMenuClickedListener(mRadialMenuContent.get(e).getMenuID());
-        }
+
         if (mCallback != null) {
-            mCallback.onRadailMenuClickedListener(mRadialMenuContent.get(e).getMenuID());
+            mCallback.onRadailMenuClickedListener(mMenuNames[e]);
 
         }
 		selected = -1;
@@ -273,7 +271,7 @@ public class RadialMenuView extends View {
 	 * @param e e
 	 */
 	private void preEvent(int e) {
-		if (e == mRadialMenuContent.size())
+		if (e == mMenuCount)
 			e = 0;
 		else if (lastE == e)
 			return;
@@ -284,14 +282,9 @@ public class RadialMenuView extends View {
 			return;
 		}
 		selected = e;
-		//单个item事件
-        if (mRadialMenuContent.get(e).getOnRadailMenuClick() != null) {
-            mRadialMenuContent.get(e).getOnRadailMenuClick()
-                    .onRadailMenuActionDownListener(mRadialMenuContent.get(e).getMenuID());
-        }
         if (mCallback != null) {
             // MenuView 事件
-            mCallback.onRadailMenuActionDownListener(mRadialMenuContent.get(e).getMenuID());
+            mCallback.onRadailMenuActionDownListener(mMenuNames[e]);
         }
 
 		invalidate();
@@ -308,7 +301,7 @@ public class RadialMenuView extends View {
 			endTouch = new float[] { event.getX(), event.getY() };
 			if (mHelperFunctions.distance(mWidth, mHeight, endTouch[0], endTouch[1]) > mRadius - mThickness / 2) {
 				this.setVisibility(View.GONE);
-				return handleEvent((int) mHelperFunctions.angle(mWidth, mHeight, endTouch[0], endTouch[1], alt, mRadialMenuContent.size()));
+				return handleEvent((int) mHelperFunctions.angle(mWidth, mHeight, endTouch[0], endTouch[1], alt, mMenuCount));
 			} else {
 				this.setVisibility(View.GONE);
 				return handleEvent(-1);
@@ -321,7 +314,7 @@ public class RadialMenuView extends View {
 		} else if (event.getAction() == MotionEvent.ACTION_MOVE) {//drag
 			endTouch = new float[] { event.getX(), event.getY() };
 			if (mHelperFunctions.distance(mWidth, mHeight, endTouch[0], endTouch[1]) > mRadius - mThickness / 2) {
-				preEvent((int) mHelperFunctions.angle(mWidth, mHeight, endTouch[0], endTouch[1], alt, mRadialMenuContent.size()));
+				preEvent((int) mHelperFunctions.angle(mWidth, mHeight, endTouch[0], endTouch[1], alt, mMenuCount));
 			} else {
 				preEvent(-1);
 			}
