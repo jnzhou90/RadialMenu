@@ -88,7 +88,9 @@ public class RadialMenuView extends View {
 		mRadius = renderer.getRadius();
 		hasImage = renderer.isHasImage();
 		setVisibility(GONE); //通过mParentView调用才可实现，下面同理
-		initSetPaint(renderer);
+		if (!hasImage) {
+            initSetPaint(renderer);
+        }
 	}
 	
 	/**
@@ -137,74 +139,7 @@ public class RadialMenuView extends View {
 	public void onDraw(Canvas canvas) {
 		//Fixes drawing off screen
 		setLoc(mWidth, mHeight);
-		final RectF rect = new RectF();
-		rect.set(mWidth - mRadius, mHeight - mRadius, mWidth + mRadius, mHeight + mRadius);
-		int tot = mRadialMenuContent.size();
-
-		mBorderPaint.setStrokeWidth(mThickness);
-		//draws back of radial first
-		for (int counter = 0; counter < tot; counter++) {
-            if (alt)
-                canvas.drawArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
-            else
-                canvas.drawArc(rect, (float) (360 / tot * counter - 90), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
-		}
-
-		//draws text
-		for (int counter = 0; counter < tot; counter++) {
-            Path arc = new Path();
-            if (alt) {
-                arc.addArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2) + 10, (float) (360 / tot) - 10);
-                canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, +mThickness / 8, mTextPaint);
-            } else {
-                arc.addArc(rect, (float) (360 / tot * counter - 90) + 10, (float) (360 / tot) - 10);
-                canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, -mThickness / 8, mTextPaint);
-            }
-		}
-
-		//draws separators between each option
-		if (tot > 1)
-			for (int counter = 0; counter < tot; counter++) {
-                if (alt) {
-                    canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), 2, false, mBorderPaint);
-                    canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91 - 360 / tot / 2), 2, false, mBorderPaint);
-                } else {
-                    canvas.drawArc(rect, (float) (360 / tot * counter - 91), 2, false, mBorderPaint);
-                    canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91), 2, false, mBorderPaint);
-                }
-			}
-
-		//draws outer and inner boarders
-		mBorderPaint.setStrokeWidth(2);
-		rect.set(mWidth - mRadius - mThickness / 2, mHeight - mRadius - mThickness / 2, mWidth + mRadius + mThickness / 2, mHeight + mRadius + mThickness / 2);
-
-		for (int counter = 0; counter < tot; counter++) {
-            if (alt) {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 2, false, mBorderPaint);
-            } else {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 2, false, mBorderPaint);
-            }
-		}
-
-		rect.set(mWidth - mRadius + mThickness / 2, mHeight - mRadius + mThickness / 2, mWidth + mRadius - mThickness / 2, mHeight + mRadius - mThickness / 2);
-
-		for (int counter = 0; counter < tot; counter++) {
-            if (alt) {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
-            } else {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
-            }
-		}
-
-        for (int counter = 0; counter < tot; counter++) {
-            if (alt) {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
-            } else {
-                canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
-            }
-        }
-
-
+        int tot = mRadialMenuContent.size();
 
        if (hasImage) {
            double bridgeLength = mRadius;
@@ -238,10 +173,74 @@ public class RadialMenuView extends View {
 
                mStartAngle += angleDelay;
            }
+       } else {
+           final RectF rect = new RectF();
+           rect.set(mWidth - mRadius, mHeight - mRadius, mWidth + mRadius, mHeight + mRadius);
+
+
+           mBorderPaint.setStrokeWidth(mThickness);
+           //draws back of radial first
+           for (int counter = 0; counter < tot; counter++) {
+               if (alt)
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
+               else
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 90), (float) (360 / tot), false, (selected == counter ? mSelectedPaint : mBgPaint));
+           }
+
+           //draws text
+           for (int counter = 0; counter < tot; counter++) {
+               Path arc = new Path();
+               if (alt) {
+                   arc.addArc(rect, (float) (360 / tot * counter - 90 - 360 / tot / 2) + 10, (float) (360 / tot) - 10);
+                   canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, +mThickness / 8, mTextPaint);
+               } else {
+                   arc.addArc(rect, (float) (360 / tot * counter - 90) + 10, (float) (360 / tot) - 10);
+                   canvas.drawTextOnPath(mRadialMenuContent.get(counter).getMenuName(), arc, 0, -mThickness / 8, mTextPaint);
+               }
+           }
+
+           //draws separators between each option
+           if (tot > 1)
+               for (int counter = 0; counter < tot; counter++) {
+                   if (alt) {
+                       canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91 - 360 / tot / 2), 2, false, mBorderPaint);
+                   } else {
+                       canvas.drawArc(rect, (float) (360 / tot * counter - 91), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / tot * (counter + 1) - 91), 2, false, mBorderPaint);
+                   }
+               }
+
+           //draws outer and inner boarders
+           mBorderPaint.setStrokeWidth(2);
+           rect.set(mWidth - mRadius - mThickness / 2, mHeight - mRadius - mThickness / 2, mWidth + mRadius + mThickness / 2, mHeight + mRadius + mThickness / 2);
+
+           for (int counter = 0; counter < tot; counter++) {
+               if (alt) {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 2, false, mBorderPaint);
+               } else {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 2, false, mBorderPaint);
+               }
+           }
+
+           rect.set(mWidth - mRadius + mThickness / 2, mHeight - mRadius + mThickness / 2, mWidth + mRadius - mThickness / 2, mHeight + mRadius - mThickness / 2);
+
+           for (int counter = 0; counter < tot; counter++) {
+               if (alt) {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
+               } else {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
+               }
+           }
+
+           for (int counter = 0; counter < tot; counter++) {
+               if (alt) {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91 - 360 / tot / 2), (float) (360 / tot) + 1, false, mBorderPaint);
+               } else {
+                   canvas.drawArc(rect, (float) (360 / tot * counter - 91), (float) (360 / tot) + 1, false, mBorderPaint);
+               }
+           }
        }
-
-
-
 	}
 
 	/**
