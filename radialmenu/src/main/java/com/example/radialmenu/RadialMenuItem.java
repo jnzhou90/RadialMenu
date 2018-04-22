@@ -24,6 +24,7 @@ public class RadialMenuItem {
 
 	private String mMenuID;
 	private String mMenuName;
+	private int drawableInt;
 	private OnRadailMenuClick mCallback;
 	
 	/**
@@ -33,6 +34,12 @@ public class RadialMenuItem {
 	public RadialMenuItem(String mMenuID, String mMenuName) {
 		this.mMenuID = mMenuID;
 		this.mMenuName = mMenuName;
+	}
+
+	public RadialMenuItem(String menuID, String menuName, int drawableInt) {
+		mMenuID = menuID;
+		mMenuName = menuName;
+		this.drawableInt = drawableInt;
 	}
 
 	/**
@@ -48,7 +55,16 @@ public class RadialMenuItem {
 	public String getMenuName() {
 		return mMenuName;
 	}
-	
+
+
+	public int getDrawableInt() {
+		return drawableInt;
+	}
+
+	public void setDrawableInt(int drawableInt) {
+		this.drawableInt = drawableInt;
+	}
+
 	/**
 	 * 
 	 * @param onRadailMenuClick

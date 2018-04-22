@@ -1,8 +1,8 @@
 package cn.qimingxing.menu;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -27,24 +27,22 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_holder);
 
+
         //Init the frame layout
         mHolderLayout = findViewById(R.id.fragment_container);
         // Init the Radial Menu and menu items
-        mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 500);
-        mMenuItems.add(new RadialMenuItem("1", "1"));
-        mMenuItems.add(new RadialMenuItem("2", "2"));
-        mMenuItems.add(new RadialMenuItem("3", "3"));
-        mMenuItems.add(new RadialMenuItem("4", "4"));
-        mMenuItems.add(new RadialMenuItem("5", "5"));
-        mMenuItems.add(new RadialMenuItem("6", "6"));
-        mMenuItems.add(new RadialMenuItem("7", "7"));
-        mMenuItems.add(new RadialMenuItem("8", "8"));
-        mMenuItems.add(new RadialMenuItem("9", "9"));
-        mMenuItems.add(new RadialMenuItem("0", "0"));
-        mMenuItems.add(new RadialMenuItem("保存", "保存"));
+        mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 350);
+        mMenuItems.add(new RadialMenuItem("1", "1",  R.drawable.ic_launcher));
+        mMenuItems.add(new RadialMenuItem("2", "2",  R.drawable.ic_launcher));
+        mMenuItems.add(new RadialMenuItem("3", "3",  R.drawable.ic_launcher));
+        mMenuItems.add(new RadialMenuItem("4", "4",  R.drawable.ic_launcher));
+        mMenuItems.add(new RadialMenuItem("5", "5",  R.drawable.ic_launcher));
+//        mMenuItems.add(new RadialMenuItem("6", "6",  R.drawable.ic_launcher));
+//        mMenuItems.add(new RadialMenuItem("7", "7",  R.drawable.ic_launcher));
+//        mMenuItems.add(new RadialMenuItem("8", "8",  R.drawable.ic_launcher));
+//        mMenuItems.add(new RadialMenuItem("9", "9",  R.drawable.ic_launcher));
+//        mMenuItems.add(new RadialMenuItem("0", "0",  R.drawable.ic_launcher));
 
-        mMenuItems.add(new RadialMenuItem("删除", "删除"));
-        
         mRenderer.setRadialMenuContent(mMenuItems);
         RadialMenuView view = mRenderer.renderView();
         mHolderLayout.addView(view);

@@ -29,7 +29,6 @@ import java.util.ArrayList;
  */
 public class RadialMenuRenderer {
 	
-	public static final String RADIAL_NO_TEXT = "HOLLOW";
 
 	private ArrayList<RadialMenuItem> mRadialMenuContent = new ArrayList<RadialMenuItem>(0);
 	
