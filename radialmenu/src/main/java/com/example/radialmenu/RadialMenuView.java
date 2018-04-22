@@ -26,6 +26,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 /**
  * 
@@ -146,13 +148,14 @@ public class RadialMenuView extends View {
        if (hasImage) {
            double bridgeLength = mRadius;
            float angleDelay = 360 / mMenuCount;
-           double mStartAngle = 0;
+           double mStartAngle = -90;
            double left, top;
-           double smallRadius = mRadius / 4;
+
 
            Bitmap bitmap;
 
            for (int i = 0; i < mMenuCount; i++) {
+               double smallRadius = ((i == selected) ? mRadius / 3 : mRadius / 4);
                left = mWidth +
                        Math.round(bridgeLength
                                * Math.cos(Math.toRadians(mStartAngle))
@@ -173,6 +176,9 @@ public class RadialMenuView extends View {
                }
 
                mStartAngle += angleDelay;
+
+
+
            }
        } else {
            final RectF rect = new RectF();
@@ -286,7 +292,6 @@ public class RadialMenuView extends View {
             // MenuView 事件
             mCallback.onRadailMenuActionDownListener(mMenuNames[e]);
         }
-
 		invalidate();
 	}
 
