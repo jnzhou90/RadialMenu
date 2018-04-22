@@ -59,4 +59,13 @@ public class RadialMenuHelperFunctions {
 			return (angle + 360) / (360 / items);
 		return angle / (360 / items);
 	}
+
+	public float angle(float mWidth, float mHeight, float x2, float y2, int items) {
+		double dx = x2 - mWidth; //horizontal difference
+		double dy = y2 - mHeight; //vertical difference
+		float angle = (float) (Math.atan2(dy, dx) * 180 / Math.PI) + 90;
+		if (angle < 0)
+			return (angle + 360) / (360 / items);
+		return angle / (360 / items);
+	}
 }

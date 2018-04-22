@@ -26,8 +26,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 /**
  * 
@@ -72,7 +70,7 @@ public class RadialMenuView extends View {
 
     Context mContext;  //此变量考虑是不是使用
 
-    private boolean hasImage;
+    private boolean mHasImage;
 
 
 
@@ -91,9 +89,9 @@ public class RadialMenuView extends View {
 		alt = renderer.isAlt();
 		mThickness = renderer.getMenuThickness();
 		mRadius = renderer.getRadius();
-		hasImage = renderer.isHasImage();
+		mHasImage = renderer.isHasImage();
 		setVisibility(GONE); //通过mParentView调用才可实现，下面同理
-		if (!hasImage) {
+		if (!mHasImage) {
             initSetPaint(renderer);
         }
 	}
@@ -145,7 +143,7 @@ public class RadialMenuView extends View {
 		//Fixes drawing off screen
 		setLoc(mWidth, mHeight);
         
-       if (hasImage) {
+       if (mHasImage) {
            double bridgeLength = mRadius;
            float angleDelay = 360 / mMenuCount;
            double mStartAngle = -90;
@@ -191,7 +189,9 @@ public class RadialMenuView extends View {
                if (alt)
                    canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 90 - 360 / mMenuCount / 2), (float) (360 / mMenuCount), false, (selected == counter ? mSelectedPaint : mBgPaint));
                else
-                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 90), (float) (360 / mMenuCount), false, (selected == counter ? mSelectedPaint : mBgPaint));
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 90),
+                           (float) (360 / mMenuCount), false,
+                           (selected == counter ? mSelectedPaint : mBgPaint));
            }
 
            //draws text
@@ -201,8 +201,10 @@ public class RadialMenuView extends View {
                    arc.addArc(rect, (float) (360 / mMenuCount * counter - 90 - 360 / mMenuCount / 2) + 10, (float) (360 / mMenuCount) - 10);
                    canvas.drawTextOnPath(mMenuNames[counter], arc, 0, +mThickness / 8, mTextPaint);
                } else {
-                   arc.addArc(rect, (float) (360 / mMenuCount * counter - 90) + 10, (float) (360 / mMenuCount) - 10);
-                   canvas.drawTextOnPath(mMenuNames[counter], arc, 0, -mThickness / 8, mTextPaint);
+                   arc.addArc(rect, (float) (360 / mMenuCount * counter - 90) + 10,
+                           (float) (360 / mMenuCount) - 10);
+                   canvas.drawTextOnPath(mMenuNames[counter], arc, 0,
+                           -mThickness / 8, mTextPaint);
                }
            }
 
@@ -213,24 +215,34 @@ public class RadialMenuView extends View {
                        canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), 2, false, mBorderPaint);
                        canvas.drawArc(rect, (float) (360 / mMenuCount * (counter + 1) - 91 - 360 / mMenuCount / 2), 2, false, mBorderPaint);
                    } else {
-                       canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), 2, false, mBorderPaint);
-                       canvas.drawArc(rect, (float) (360 / mMenuCount * (counter + 1) - 91), 2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91),
+                               2, false, mBorderPaint);
+                       canvas.drawArc(rect, (float) (360 / mMenuCount * (counter + 1) - 91),
+                               2, false, mBorderPaint);
                    }
                }
 
            //draws outer and inner boarders
            mBorderPaint.setStrokeWidth(2);
-           rect.set(mWidth - mRadius - mThickness / 2, mHeight - mRadius - mThickness / 2, mWidth + mRadius + mThickness / 2, mHeight + mRadius + mThickness / 2);
+           rect.set(mWidth - mRadius - mThickness / 2,
+                   mHeight - mRadius - mThickness / 2,
+                   mWidth + mRadius + mThickness / 2,
+                   mHeight + mRadius + mThickness / 2);
 
            for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt) {
                    canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), (float) (360 / mMenuCount) + 2, false, mBorderPaint);
                } else {
-                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), (float) (360 / mMenuCount) + 2, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91),
+                           (float) (360 / mMenuCount) + 2,
+                           false, mBorderPaint);
                }
            }
 
-           rect.set(mWidth - mRadius + mThickness / 2, mHeight - mRadius + mThickness / 2, mWidth + mRadius - mThickness / 2, mHeight + mRadius - mThickness / 2);
+           rect.set(mWidth - mRadius + mThickness / 2,
+                   mHeight - mRadius + mThickness / 2,
+                   mWidth + mRadius - mThickness / 2,
+                   mHeight + mRadius - mThickness / 2);
 
            for (int counter = 0; counter < mMenuCount; counter++) {
                if (alt) {
@@ -244,7 +256,8 @@ public class RadialMenuView extends View {
                if (alt) {
                    canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91 - 360 / mMenuCount / 2), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                } else {
-                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91), (float) (360 / mMenuCount) + 1, false, mBorderPaint);
+                   canvas.drawArc(rect, (float) (360 / mMenuCount * counter - 91),
+                           (float) (360 / mMenuCount) + 1, false, mBorderPaint);
                }
            }
        }

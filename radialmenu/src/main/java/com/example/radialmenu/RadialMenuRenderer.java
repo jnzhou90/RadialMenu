@@ -87,6 +87,17 @@ public class RadialMenuRenderer {
 		return menu;
 	}
 
+	public RadialMenuSurfaceView renderSurfaceView() {
+		final RadialMenuSurfaceView menu = new RadialMenuSurfaceView(mParentView.getContext(), this);
+		mParentView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return menu.gestureHandler(event, true);
+			}
+		});
+		return menu;
+	}
+
 
     public String[] getMenuNames() {
         return mMenuNames;

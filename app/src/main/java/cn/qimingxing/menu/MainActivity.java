@@ -7,9 +7,7 @@ import android.widget.Toast;
 
 import com.example.radialmenu.OnRadailMenuClick;
 import com.example.radialmenu.RadialMenuRenderer;
-import com.example.radialmenu.RadialMenuView;
-
-import java.util.ArrayList;
+import com.example.radialmenu.RadialMenuSurfaceView;
 
 
 
@@ -34,7 +32,7 @@ public class MainActivity extends FragmentActivity {
         // Init the Radial Menu and menu items
         mRenderer = new RadialMenuRenderer(mHolderLayout, true, 100, 350, true);
         mRenderer.setRadialMenuContent(mMenuNames, mMenuImages);
-        RadialMenuView view = mRenderer.renderView();
+        RadialMenuSurfaceView view = mRenderer.renderSurfaceView();
         mHolderLayout.addView(view);
         //Handle the menu item interactions
         view.setOnRadialMenuClickListener(new OnRadailMenuClick() {
